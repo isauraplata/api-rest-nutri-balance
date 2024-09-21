@@ -3,6 +3,8 @@ import * as dotenv from "dotenv"
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 
+import { userRouter } from "./user/infrastructure/userRouter";
+
 const app =express();
 
 dotenv.config();
@@ -29,3 +31,5 @@ app.listen(port,()=>{
 
 
 
+
+app.use("/api/v1/users",userRouter);
