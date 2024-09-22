@@ -1,7 +1,7 @@
 import { User } from "./userModel";
 
 export interface UserRepository {
-  createUser(
+  signUp(
     name: string,
     email: string,
     password: string,

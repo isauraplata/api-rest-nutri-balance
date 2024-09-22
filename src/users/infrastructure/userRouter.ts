@@ -1,9 +1,9 @@
 import express from "express";
 
-import { createUserController, signInController } from "./dependencies";
+import { signUpController, signInController } from "./dependencies";
 
 export const userRouter = express.Router();
 
-userRouter.post("/signup",createUserController.run.bind(createUserController))
+userRouter.post("/signup",signUpController.run.bind(signUpController))
 userRouter.post("/signin",signInController.run.bind(signInController))
 

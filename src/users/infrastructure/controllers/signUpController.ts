@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import { CreateUser } from "../../application/createUserUseCase";
+import { SignUp } from "../../application/signUpUseCase";
 
 import { signUpBodyValidation } from "../utils/validationSchema";
 
-export class CreateUserController {
-  constructor(readonly createUserUseCase: CreateUser) {}
+export class SignUpController {
+  constructor(readonly singUpUseCase: SignUp) {}
 
   async run(req: Request, res: Response) {
     const data = req.body;
@@ -25,7 +25,7 @@ export class CreateUserController {
 
       console.log(hashPassword)
 
-      const user = await this.createUserUseCase.run(
+      const user = await this.singUpUseCase.run(
         data.name,
         data.email,
         hashPassword,
