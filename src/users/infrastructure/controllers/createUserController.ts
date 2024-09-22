@@ -28,7 +28,7 @@ export class CreateUserController {
       const user = await this.createUserUseCase.run(
         data.name,
         data.email,
-        data.password,
+        hashPassword,
         new Date(data.dateOfBirth), // Convertir fecha de nacimiento a Date
         data.height,
         data.weight,

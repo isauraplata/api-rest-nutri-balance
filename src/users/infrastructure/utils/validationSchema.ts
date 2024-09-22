@@ -6,7 +6,7 @@ export const signUpBodyValidation = (body: object) => {
     name: Joi.string().required().label("Name"),
     email: Joi.string().email().required().label("Email"),
     password: passwordComplexity().required().label("Password"),
-    dateOfBirth: Joi.date().iso().required().label("Date of Birth"), // Validar como fecha ISO
+    dateOfBirth: Joi.date().iso().required().label("Date of Birth"), 
     height: Joi.number().positive().required().label("Height"), // Validar altura como número positivo
     weight: Joi.number().positive().required().label("Weight"), // Validar peso como número positivo
     medicalConditions: Joi.array().items(Joi.string()).label("Medical Conditions"), // Validar un array de strings
@@ -15,5 +15,15 @@ export const signUpBodyValidation = (body: object) => {
     subscriptionType: Joi.string().valid("free", "premium").default("free").label("Subscription Type"), // Validar como 'free' o 'premium'
   });
   
+  return schema.validate(body);
+};
+
+
+export const signInBodyValidation = (body: object) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required().label("Email"),
+    password: Joi.string().required().label("Password"), 
+  });
+
   return schema.validate(body);
 };
