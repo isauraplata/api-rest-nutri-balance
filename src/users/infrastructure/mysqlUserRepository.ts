@@ -89,7 +89,7 @@ export class MysqlUserRepository implements UserRepository {
   updateUser(user: User): Promise<User | null> {
       throw new Error("Method not implemented.");
   }
-  async createUser(
+  async signUp(
     name: string,
     email: string,
     password: string,

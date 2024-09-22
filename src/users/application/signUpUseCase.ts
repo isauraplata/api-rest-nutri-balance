@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { User } from "../domain/userModel";
 
 import { UserRepository } from '../domain/userRepository';
-export class CreateUser {
+export class SignUp {
   constructor(readonly userRepository: UserRepository) {}
 
   async run(
@@ -20,7 +20,7 @@ export class CreateUser {
   ): Promise<User | null> {
     try {
       const id = uuidv4();
-      const user = await this.userRepository.createUser(
+      const user = await this.userRepository.signUp(
         name,
         email,
         password,
