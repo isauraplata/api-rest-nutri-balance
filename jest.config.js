@@ -2,7 +2,7 @@ module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'node',
     verbose: true,
-    testMatch: ['**/src/test/users/signin.test.ts'], 
+    testMatch: ['**/src/test/**/*.test.ts'], 
     moduleFileExtensions: ['ts', 'js'],
     transform: {
       '^.+\\.ts?$': 'ts-jest',
