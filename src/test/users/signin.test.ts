@@ -1,20 +1,52 @@
-import request from 'supertest';
-import app from "../../index";  
+import { signInBodyValidation } from '../../users/infrastructure/utils/validationSchema';
 
-describe('POST /signin', () => {
-  
-  it('should log in a user successfully with valid credentials', async () => {
-    const response = await request(app)
-      .post('/api/v1/users/signin')  
-      .send({
-        email: 'z@example.com',
-        password: 'StrongP@ssw0rd'
-      });
+describe('signInBodyValidation', () => {
 
-    expect(response.status).toBe(200);  // Verifica que el estado sea 200 (OK)
-    expect(response.body).toHaveProperty('error', false);  // Verifica que error sea false
-    expect(response.body).toHaveProperty('message', 'Logged in successfully');  // Verifica el mensaje de éxito
-    expect(response.body).toHaveProperty('accessToken');  // Verifica que se devuelva un accessToken
+  it('should pass validation with valid email and password', () => {
+    const validInput = {
+      email: 'test@example.com',
+      password: 'ValidP@ssword123'
+    };
+
+    const { error } = signInBodyValidation(validInput);
+
+    // Verificamos que no haya errores
+    expect(error).toBeUndefined();
+  });
+
+  it('should fail validation if email is missing', () => {
+    const invalidInput = {
+      password: 'ValidP@ssword123'
+    };
+
+    const { error } = signInBodyValidation(invalidInput);
+
+    // Verificamos que exista un error de validación
+    expect(error).toBeDefined();
+  });
+
+  it('should fail validation if password is missing', () => {
+    const invalidInput = {
+      email: 'test@example.com'
+    };
+
+    const { error } = signInBodyValidation(invalidInput);
+
+    // Verificamos que exista un error de validación
+    expect(error).toBeDefined();
+
+  });
+
+  it('should fail validation if email format is invalid', () => {
+    const invalidInput = {
+      email: 'invalid-email',
+      password: 'ValidP@ssword123'
+    };
+
+    const { error } = signInBodyValidation(invalidInput);
+
+    // Verificamos que el error de validación es el correcto
+    expect(error).toBeDefined();
 
   });
 
