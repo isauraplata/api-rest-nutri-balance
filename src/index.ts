@@ -4,6 +4,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 
 import { userRouter } from "./users/infrastructure/userRouter";
+import whatsappRouter from "./whatsapp/infrastructure/whatsappRouter";
 
 const app = express();
 
@@ -32,5 +33,6 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/whatsapp", whatsappRouter)
 
 export default app;  
