@@ -1,29 +1,28 @@
+import "reflect-metadata";
+import { DataSource } from "typeorm";
 import dotenv from "dotenv";
-import mysql from "mysql2/promise";
+import { User } from "../users/domain/entities/userEntity";
 
 dotenv.config();
 
-const config = {
+export const AppDataSource = new DataSource({
+  type:"mysql",
   host: process.env.DB_HOST,
-  user: process.env.DB_USER,
+  username: process.env.DB_USER,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
-  waitForConnections: true,
-  connectionLimit: 10,
-};
+  port: Number(process.env.DB_PORT),
+  synchronize: false,
+  logging: false,
+  entities: [User],
+  migrations: [],
+  subscribers: [],
+})
 
-console.log(config);
-
-const pool = mysql.createPool(config);
-
-export async function query(sql: string, params: any[]) {
-  try {
-    const conn = await pool.getConnection();
-    const result = await conn.execute(sql, params);
-    conn.release();
-    return result;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-}
+AppDataSource.initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization", err);
+  });

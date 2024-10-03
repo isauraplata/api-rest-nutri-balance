@@ -38,9 +38,6 @@ export class SignUpController {
         data.subscriptionType || 'free',
       );
 
-      console.log("imprimiendo user desde controller");
-      console.log(user);
-
       // Respuesta de éxito si el usuario fue creado
       if (user)
         res.status(201).send({
