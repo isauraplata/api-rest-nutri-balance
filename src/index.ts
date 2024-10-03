@@ -4,7 +4,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 
 import { userRouter } from "./users/infrastructure/userRouter";
-import { routerMercadoPago } from "./mercado pago/infrastructure/mercadoRouter";
+import { routerMercadoPago } from "./mercadoPago/infrastructure/mercadoRouter";
 
 const app = express();
 
