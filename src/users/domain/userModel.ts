@@ -12,6 +12,7 @@ export class User {
       public allergies: string[],
       public preferredFood: string[],
       public subscriptionType: 'free' | 'premium',
-      public paymentMethod?: 'paypal' | null
+      public paymentMethod?: 'mercadopago' | 'paypal' | null,
+      public lastPaymentId?: string
     ) {}
   }

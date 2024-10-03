@@ -19,12 +19,13 @@ export class SignUpController {
           .status(400)
           .json({ error: error, message: error.details[0].message });
 
+          console.log("imprimiendo la contraseña antes de encriptar: ", req.body.password);
+          console.log(req.body.password)
+
       // Generar hash de la contraseña
       const salt = await bcrypt.genSalt(Number(process.env.SALT));
       const hashPassword = await bcrypt.hash(req.body.password, salt);
-
-      console.log(hashPassword)
-
+      
       const user = await this.singUpUseCase.run(
         data.name,
         data.email,
@@ -38,10 +39,9 @@ export class SignUpController {
         data.subscriptionType || 'free',
       );
 
-      console.log("imprimiendo user desde controller");
-      console.log(user);
+      console.log("imprimiendo la contraseña encriptada: ", hashPassword);
+      console.log(hashPassword);
 
-      // Respuesta de éxito si el usuario fue creado
       if (user)
         res.status(201).send({
           status: "success",

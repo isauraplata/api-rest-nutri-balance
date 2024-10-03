@@ -5,7 +5,6 @@ dotenv.config();
 const generateTokens = async (user: any) => {
   const { id, uuid } = user;
 
-  // Verificar que las claves secretas estén definidas
   const accessTokenPrivateKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
   const refreshTokenPrivateKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
 

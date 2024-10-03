@@ -4,7 +4,7 @@ import { UpdateSubscription } from '../../application/updateSubscriptionUseCase'
 export class SubscriptionController {
   constructor(readonly updateSubscription: UpdateSubscription) {}
 
-  async run(req: Request, res: Response): Promise<Response> { // Cambiado a Promise<Response>
+  async run(req: Request, res: Response): Promise<Response> { 
     const { uuid } = req.params;
     const data = req.body;
     console.log("data: ", data);

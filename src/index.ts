@@ -4,6 +4,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 
 import { userRouter } from "./users/infrastructure/userRouter";
+import { routerMercadoPago } from "./mercado pago/infrastructure/mercadoRouter";
 
 const app = express();
 
@@ -32,5 +33,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 app.use("/api/v1/users", userRouter);
+
+app.use("/api/v1/mercado", routerMercadoPago);
 
 export default app;  

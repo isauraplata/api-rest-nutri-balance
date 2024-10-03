@@ -28,6 +28,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.7",
+    "@types/mercadopago": "^1.5.11",
     "@types/uuid": "^10.0.0",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
@@ -38,7 +39,10 @@
     "joi": "^17.13.3",
     "joi-password-complexity": "^5.2.0",
     "jsonwebtoken": "^9.0.2",
+    "mercadopago": "^2.0.15",
+    "morgan": "^1.10.0",
     "mysql2": "^3.11.2",
+    "node-fetch": "^2.7.0",
     "uuid": "^10.0.0"
   }
 }
