@@ -7,6 +7,9 @@ export class SendMessageController {
     async handle(req: Request, res: Response): Promise<Response> {
         const { to, message } = req.body;
 
+        console.log("Recibiendo el req.body");
+        console.log(req.body)
+        
         try {
             await this.sendMessageUseCase.execute(to, message);
             return res.status(200).json({ message: "Message sent successfully" });

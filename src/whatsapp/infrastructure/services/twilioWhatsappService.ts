@@ -10,6 +10,7 @@ export class TwilioWhatsAppService implements WhatsAppService {
     }
 
     async sendMessage(message: WhatsAppMessage): Promise<void> {
+        console.log("LLego hasta aca");
         await this.client.messages.create({
             body: message.message,
             from: `whatsapp:${process.env.TWILIO_WHATSAPP_NUMBER}`,

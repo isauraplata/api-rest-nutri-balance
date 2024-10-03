@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import { AppDataSource } from "./database/connection";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import { routerMercadoPago } from "./mercadoPago/infrastructure/mercadoRouter";
 
 
 import { userRouter } from "./users/infrastructure/userRouter";
@@ -36,5 +37,6 @@ AppDataSource.initialize().then(() => {
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/whatsapp", whatsappRouter)
+app.use("/api/v1/mercado", routerMercadoPago);
 
 export default app;  
