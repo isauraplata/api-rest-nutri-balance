@@ -38,7 +38,11 @@
     "joi": "^17.13.3",
     "joi-password-complexity": "^5.2.0",
     "jsonwebtoken": "^9.0.2",
+    "mercadopago": "^2.0.15",
     "mysql2": "^3.11.2",
+    "reflect-metadata": "^0.2.2",
+    "twilio": "^5.3.2",
+    "typeorm": "^0.3.20",
     "uuid": "^10.0.0"
   }
 }

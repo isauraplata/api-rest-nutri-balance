@@ -1,9 +1,13 @@
 import express from "express";
+import "reflect-metadata";
 import * as dotenv from "dotenv";
+import { AppDataSource } from "./database/connection";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 
+
 import { userRouter } from "./users/infrastructure/userRouter";
+import whatsappRouter from "./whatsapp/infrastructure/whatsappRouter";
 
 const app = express();
 
@@ -23,14 +27,14 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-// Mover el `app.listen` a un archivo separado cuando hagas pruebas
-if (process.env.NODE_ENV !== 'test') {
+AppDataSource.initialize().then(() => {
   app.listen(port, () => {
     console.log("listening on port: " + port);
     console.log(now.toLocaleString());
   });
-}
+})
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/whatsapp", whatsappRouter)
 
 export default app;  
