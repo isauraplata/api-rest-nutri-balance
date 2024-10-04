@@ -72,4 +72,48 @@ export class MercadoPagoRepositoryImpl implements MercadoPagoRepository {
       throw new Error('Error al crear la suscripción');
     }
   }
+
+  async getSubscription(subscriptionId: string): Promise<any> {
+    try {
+        const response = await axios.get(`https://api.mercadopago.com/preapproval/${subscriptionId}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.accessToken}`
+            }
+        });
+
+        console.log("RESPONSE SUSCRIPCION ", response);
+        return response.data; 
+    } catch (error) {
+        console.error('Error al obtener la suscripción:', error);
+        throw new Error('Error al obtener la suscripción');
+    }
+}
+
+async searchSubscriptionsByEmail(email: string): Promise<any> {
+  try {
+    // Corrección en la URL y parámetros
+    console.log("AHHHH EMIALL", email);
+    const response = await axios.get(`https://api.mercadopago.com/preapproval/search`, {
+      params: {
+        payer_email: email
+      },
+      headers: {
+        'Authorization': `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.data) {
+      throw new Error('No se encontraron datos en la respuesta');
+    }
+
+    console.log('Response from MP:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error al buscar suscripciones:', error);
+    throw new Error('Error al buscar suscripciones por email');
+  }
+}
+
 }
