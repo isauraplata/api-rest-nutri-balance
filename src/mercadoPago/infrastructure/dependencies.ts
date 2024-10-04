@@ -5,10 +5,14 @@ import { PlanController } from "./controllers/createPlanController";
 import { SubscriptionController } from "./controllers/createSubscriptionController";
 import { GetSubscriptionController } from "./controllers/getSubscriptionController";
 import { MercadoPagoRepositoryImpl } from "./MercadoPagoRepository";
-
 import { GetSubscriptionByEmailUseCase } from "../application/getSubscriptionsByEmailUseCase";
-
 import { GetSubscriptionByEmailController } from "./controllers/getSubscriptionsByEmailController";
+import { UpdateSubscriptionController } from "./controllers/updateSubscriptionController";
+import { UpdateSubscriptionUseCase } from "../application/updateSubscriptionUseCase";
+import { GetPlanController } from "./controllers/GetPlanController";
+import { GetPlanUseCase } from "../application/GetPlanUseCase";
+import { CreateCardTokenUseCase } from "../application/ createCardTokenUseCase";
+import { CardTokenController } from "./controllers/cardTokenController";
 
 const mercadoPagoRepository = new MercadoPagoRepositoryImpl(
   process.env.ACCESS_TOKEN_MERCADO_PAGO || "",
@@ -20,7 +24,6 @@ export const createSubscriptionUseCase = new CreateSubscriptionUseCase(mercadoPa
 export const getSubscriptionUseCase = new GetSubscriptionUseCase(mercadoPagoRepository);
 
 
-
 export const planController = new PlanController(createPlanUseCase);
 export const subscriptionController = new SubscriptionController(createSubscriptionUseCase);
 export const getSubscriptionController = new GetSubscriptionController(getSubscriptionUseCase);
@@ -28,3 +31,14 @@ export const getSubscriptionController = new GetSubscriptionController(getSubscr
 
 export const getSubscriptionByEmailUseCase = new GetSubscriptionByEmailUseCase(mercadoPagoRepository);
 export const getSubscriptionByEmailController = new GetSubscriptionByEmailController(getSubscriptionByEmailUseCase);
+
+
+export const updateSubscriptionUseCase = new UpdateSubscriptionUseCase(mercadoPagoRepository)
+export const updateSubscriptionController = new UpdateSubscriptionController(updateSubscriptionUseCase)
+
+
+export const getPlanUseCase = new GetPlanUseCase(mercadoPagoRepository)
+export const getPlanController = new GetPlanController(getPlanUseCase)
+
+export const createCardTokenUseCase = new CreateCardTokenUseCase(mercadoPagoRepository);
+export const cardTokenController = new CardTokenController(createCardTokenUseCase);
