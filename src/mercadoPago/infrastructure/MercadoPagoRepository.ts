@@ -116,4 +116,71 @@ async searchSubscriptionsByEmail(email: string): Promise<any> {
   }
 }
 
+
+async updateSubscription(subscriptionId: string, subscriptionData: any): Promise<any> {
+  try {
+    const response = await axios.put(
+      `https://api.mercadopago.com/preapproval/${subscriptionId}`,
+      {
+        reason: subscriptionData.reason,
+        back_url: subscriptionData.back_url,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    console.log("Response de actualización de suscripción:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar la suscripción:', error);
+    throw new Error('Error al actualizar la suscripción');
+  }
+}
+
+async getPlan(planId: string): Promise<any> {
+  try {
+    const response = await axios.get(`https://api.mercadopago.com/preapproval_plan/${planId}`, {
+      headers: {
+        'Authorization': `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log("Plan de suscripción obtenido:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener el plan de suscripción:', error);
+    throw new Error('Error al obtener el plan de suscripción');
+  }
+}
+
+async createCardToken(cardData: any): Promise<any> {
+  try {
+    const response = await axios.post("https://api.mercadopago.com/v1/card_tokens", {
+      card_number: cardData.card_number,
+      cardholder_name: cardData.cardholder_name,
+      expiration_month: cardData.expiration_month,
+      expiration_year: cardData.expiration_year,
+      security_code: cardData.security_code,
+      cardholder: {
+        name: cardData.cardholder.name
+      }
+    }, {
+      headers: {
+        "Authorization": `Bearer ${this.accessToken}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    console.log("Card token response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error al crear el token de tarjeta:', error);
+    throw new Error('Error al crear el token de tarjeta');
+  }
+}
+
+
 }
