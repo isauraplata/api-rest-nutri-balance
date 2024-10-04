@@ -12,9 +12,7 @@ export abstract class BaseEntity {
   updated_at!: Date; // Usar '!' para indicar que será inicializado por TypeORM
 
   @Column({ type: 'uuid', unique: true })
-  uuid: string;
+  uuid!: string;
 
-  constructor() {
-    this.uuid = uuidv4(); // Genera el UUID al crear la entidad
-  }
+  
 }

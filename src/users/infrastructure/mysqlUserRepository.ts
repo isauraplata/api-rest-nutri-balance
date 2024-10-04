@@ -24,6 +24,36 @@ export class MysqlUserRepository implements UserRepository{
         }
     }
 
+    async getAllUsers(
+        fields: string[] | null = null,
+        page: number = 1,
+        limit: number = 10
+    ): Promise<User[] | null> {
+        try {
+            const query = this.userRepository.createQueryBuilder('user');
+ 
+ 
+            const defaultFields = ['uuid', 'created_at', 'updated_at'];
+ 
+ 
+            console.log(fields)
+           
+            if (fields && fields.length > 0) {
+                // Unir los campos por defecto y los campos adicionales
+                query.select([...defaultFields.map(field => `user.${field}`), ...fields.map(field => `user.${field}`)]);
+            }
+   
+           
+            query.skip((page - 1) * limit).take(limit);
+   
+            const users = await query.getMany();
+   
+            return users.map(this.mapToDomain);
+        } catch (error) {
+            throw new Error(`Error retrieving users: ${error}`);
+        }
+    }
+ 
     async signIn(email: string, password: string): Promise<User | null> {
         try {
             const user = await this.userRepository.findOne({ where: { email } });
@@ -36,18 +66,35 @@ export class MysqlUserRepository implements UserRepository{
         }
     }
 
-    async findUserByUUID(uuid: string): Promise<User | null> {
+    async findUserByUUID(
+        uuid: string,
+        fields: string[] | null = null,
+    ): Promise<User | null> {
         try {
-            const user = await this.userRepository.findOne({ where: { uuid } });
-            if (!user) {
+            const query = this.userRepository.createQueryBuilder("user").where('user.uuid = :uuid', {uuid})
+ 
+ 
+            const defaultFields = ['uuid', 'created_at', 'updated_at'];
+ 
+ 
+            if(fields && fields.length > 0){
+                query.select([...defaultFields.map(field => `user.${field}`), ...fields.map(field => `user.${field}`)]);
+            }
+           
+            const newUser = await query.getOne();
+ 
+ 
+            if (!newUser) {
                 return null;
             }
-            return this.mapToDomain(user);
+ 
+ 
+            return this.mapToDomain(newUser);
         } catch (error) {
             throw new Error(`Error finding user by UUID: ${error}`);
         }
     }
-
+ 
     async signUp(
         name: string,
         email: string,
@@ -86,42 +133,31 @@ export class MysqlUserRepository implements UserRepository{
         }
     }
 
-    async updateUser(user: User): Promise<User | null> {
+    async updateUser(uuid: string, updatedFields: Partial<User>): Promise<User | null> {
         try {
-            const existingUser = await this.userRepository.findOne({ where: { id: user.id } });
-
-            if (!existingUser) {
-                return null; // Retorna null si el usuario no se encuentra
-            }
-
-            // Actualiza las propiedades del usuario
-            existingUser.name = user.name;
-            existingUser.email = user.email;
-            existingUser.password = user.password; // Considera encriptar la contraseña
-            existingUser.dateOfBirth = user.dateOfBirth;
-            existingUser.height = user.height;
-            existingUser.weight = user.weight;
-            existingUser.medicalConditions = user.medicalConditions;
-            existingUser.allergies = user.allergies;
-            existingUser.preferredFood = user.preferredFood;
-            existingUser.subscriptionType = user.subscriptionType;
-
-            const updatedUser = await this.userRepository.save(existingUser);
-            return this.mapToDomain(updatedUser); // Mapea de nuevo a tu modelo de dominio
+            const user = await this.userRepository.findOne({ where: { uuid } });
+            if (!user) return null;
+ 
+ 
+            console.log("Imprimiendo los updatedFields")
+            console.log(updatedFields)
+            Object.assign(user, updatedFields);
+            await this.userRepository.save(user);
+            return this.mapToDomain(user);
         } catch (error) {
             throw new Error(`Error updating user: ${error}`);
         }
     }
-
-    async deleteUser(id: string): Promise<boolean> {
+ 
+    async deleteUser(uuid: string): Promise<boolean> {
         try {
-            const result = await this.userRepository.delete(id);
-            return result.affected! > 0; 
+            const result = await this.userRepository.delete({ uuid });
+            return result.affected! > 0;
         } catch (error) {
             throw new Error(`Error deleting user: ${error}`);
         }
     }
-
+ 
     private mapToDomain(user: UserEntity): User {
         return new User(
             user.id,
@@ -129,7 +165,7 @@ export class MysqlUserRepository implements UserRepository{
             user.name,
             user.email,
             user.password,
-            new Date(user.dateOfBirth), // Asegúrate de que el nombre de la columna sea correcto
+            user.dateOfBirth, // Asegúrate de que el nombre de la columna sea correcto
             user.height,
             user.weight,
             user.medicalConditions,
