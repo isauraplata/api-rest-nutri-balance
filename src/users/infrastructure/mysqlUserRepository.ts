@@ -1,9 +1,10 @@
-import { getRepository, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { User as UserEntity } from "../domain/entities/userEntity";
 import { User } from "../domain/userModel";
 import { UserRepository } from "../domain/userRepository";
 import { AppDataSource } from "../../database/connection";
 import { v4 as uuidv4 } from "uuid";
+import { PaginationResponse } from "../../utils/paginationResponse";
 
 export class MysqlUserRepository implements UserRepository{
     private userRepository: Repository<UserEntity>
@@ -28,7 +29,7 @@ export class MysqlUserRepository implements UserRepository{
         fields: string[] | null = null,
         page: number = 1,
         limit: number = 10
-    ): Promise<User[] | null> {
+    ): Promise<PaginationResponse<User> | null> {
         try {
             const query = this.userRepository.createQueryBuilder('user');
  
@@ -47,8 +48,17 @@ export class MysqlUserRepository implements UserRepository{
             query.skip((page - 1) * limit).take(limit);
    
             const users = await query.getMany();
+
+            const response = {
+                pagination: {
+                    currentPage: page,
+                    limit: limit,
+                    total: users.length, 
+                },
+                data: users
+            };
    
-            return users;
+            return response;
         } catch (error) {
             throw new Error(`Error retrieving users: ${error}`);
         }
@@ -153,7 +163,7 @@ export class MysqlUserRepository implements UserRepository{
         }
     }
 
-    async getUsersByStatus(status: string, fields: string[] | null, page: number, limit: number): Promise<User[] | null> {
+    async getUsersByStatus(status: string, fields: string[] | null, page: number, limit: number): Promise<PaginationResponse<User>| null> {
         try {
             const query = this.userRepository.createQueryBuilder('user').where('user.subscriptionType = :status', {status});
  
@@ -169,7 +179,16 @@ export class MysqlUserRepository implements UserRepository{
    
             const users = await query.getMany();
 
-            return users;
+            const response = {
+                pagination: {
+                    currentPage: page,
+                    limit: limit,
+                    total: users.length, 
+                },
+                data: users
+            };
+   
+            return response;
         } catch (error) {
             throw new Error(`Error retrieving users: ${error}`);
         }

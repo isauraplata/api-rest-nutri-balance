@@ -1,4 +1,5 @@
 import { User } from "./userModel";
+import { PaginationResponse } from "../../utils/paginationResponse";
 
 export interface UserRepository {
   findUserByEmail(email: string): Promise<User | null>;
@@ -6,7 +7,7 @@ export interface UserRepository {
     fields: string[] | null,
     page: number,
     limit: number
-  ): Promise<User[] | null>; 
+  ): Promise<PaginationResponse<User> | null>; 
   signIn(email: string, password: string): Promise<User | null>;
   findUserByUUID(uuid: string, fields: string[] | null): Promise<User | null>;
   getUsersByStatus(
@@ -14,7 +15,7 @@ export interface UserRepository {
     fields: string[] | null,
     page: number,
     limit: number
-  ): Promise<User[] | null>;
+  ): Promise<PaginationResponse<User> | null>;
   updateUser(uuid: string, updateFields: Partial<User>): Promise<User | null>;
   signUp(
     name: string,
