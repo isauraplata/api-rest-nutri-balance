@@ -12,6 +12,8 @@ export class User {
       public allergies: string[],
       public preferredFood: string[],
       public subscriptionType: 'free' | 'premium',
-      public paymentMethod?: 'paypal' | null
+      public readonly paymentMethod?: 'paypal' | null,
+      public readonly created_at?: Date, 
+      public readonly updated_at?: Date 
     ) {}
   }

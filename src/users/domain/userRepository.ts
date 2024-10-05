@@ -9,6 +9,12 @@ export interface UserRepository {
   ): Promise<User[] | null>; 
   signIn(email: string, password: string): Promise<User | null>;
   findUserByUUID(uuid: string, fields: string[] | null): Promise<User | null>;
+  getUsersByStatus(
+    status: string, 
+    fields: string[] | null,
+    page: number,
+    limit: number
+  ): Promise<User[] | null>;
   updateUser(uuid: string, updateFields: Partial<User>): Promise<User | null>;
   signUp(
     name: string,
