@@ -48,7 +48,7 @@ export class MysqlUserRepository implements UserRepository{
    
             const users = await query.getMany();
    
-            return users.map(this.mapToDomain);
+            return users;
         } catch (error) {
             throw new Error(`Error retrieving users: ${error}`);
         }
@@ -122,8 +122,6 @@ export class MysqlUserRepository implements UserRepository{
             subscriptionType,
         });
 
-        console.log("Imprimiendo el user")
-        console.log(user)
         
         try {
             const savedUser = await this.userRepository.save(user);
@@ -137,10 +135,7 @@ export class MysqlUserRepository implements UserRepository{
         try {
             const user = await this.userRepository.findOne({ where: { uuid } });
             if (!user) return null;
- 
- 
-            console.log("Imprimiendo los updatedFields")
-            console.log(updatedFields)
+
             Object.assign(user, updatedFields);
             await this.userRepository.save(user);
             return this.mapToDomain(user);
@@ -157,6 +152,28 @@ export class MysqlUserRepository implements UserRepository{
             throw new Error(`Error deleting user: ${error}`);
         }
     }
+
+    async getUsersByStatus(status: string, fields: string[] | null, page: number, limit: number): Promise<User[] | null> {
+        try {
+            const query = this.userRepository.createQueryBuilder('user').where('user.subscriptionType = :status', {status});
+ 
+            const defaultFields = ['uuid', 'created_at', 'updated_at'];
+           
+            if (fields && fields.length > 0) {
+                // Unir los campos por defecto y los campos adicionales
+                query.select([...defaultFields.map(field => `user.${field}`), ...fields.map(field => `user.${field}`)]);
+            }
+   
+           
+            query.skip((page - 1) * limit).take(limit);
+   
+            const users = await query.getMany();
+
+            return users;
+        } catch (error) {
+            throw new Error(`Error retrieving users: ${error}`);
+        }
+    }
  
     private mapToDomain(user: UserEntity): User {
         return new User(
@@ -165,7 +182,7 @@ export class MysqlUserRepository implements UserRepository{
             user.name,
             user.email,
             user.password,
-            user.dateOfBirth, // Asegúrate de que el nombre de la columna sea correcto
+            user.dateOfBirth,
             user.height,
             user.weight,
             user.medicalConditions,

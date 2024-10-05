@@ -17,6 +17,9 @@ import { UpdateUserController } from "./controllers/updateUserController";
 import { DeleteUserUseCase } from "../application/deleteUserUseCase";
 import { DeleteUserController } from "./controllers/deleteUserController";
 
+import { GetUsersByStatusUseCase } from "../application/getUsersByStatusUseCase";
+import { GetUsersByStatusController } from "./controllers/getUsersByStatusController";
+
 const userRepository = new MysqlUserRepository();
 
 export const signUpUseCase = new SignUp(userRepository);
@@ -37,3 +40,6 @@ export const updateUserController = new UpdateUserController(updateUserUseCase);
 
 const deleteUserUseCase =  new DeleteUserUseCase(userRepository);
 export const deleteUserController = new DeleteUserController(deleteUserUseCase);
+
+const getUsersByStatusUseCase = new GetUsersByStatusUseCase(userRepository);
+export const getUsersByStatusController = new GetUsersByStatusController(getUsersByStatusUseCase);
