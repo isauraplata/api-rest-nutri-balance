@@ -1,12 +1,13 @@
 import { UserRepository } from "../domain/userRepository";
 import { User } from "../domain/userModel";
+import { PaginationResponse } from "../../utils/paginationResponse";
 
 
 export class GetAllUserUseCase{
    constructor(private readonly userRepository: UserRepository) {}
 
 
-   async run(fields: string[] | null = null, page: number = 1, limit: number = 10): Promise<User[] | null> {
+   async run(fields: string[] | null = null, page: number = 1, limit: number = 10): Promise<PaginationResponse<User> | null> {
        try {
            try {
                const validPage = isNaN(page) || page < 1 ? 1 : page;
